@@ -14,7 +14,7 @@ public class Logger {
 	
 	public Logger() {
 		LocalDate today = LocalDate.now();
-		String outFileName = "camariere-" + today.toString() + ".log";
+		String outFileName = "./logs/camariere-" + today.toString() + ".log";
 		this.outFile = new File(outFileName);
 		this.loggingLevel = LoggingLevel.ALL;
 		this.logToConsole = true;

@@ -75,7 +75,7 @@ class Server
     java.io.File local = null;
     if(path.startsWith(prefix))
     {
-      local = new java.io.File(".", path.substring(prefix.length()));
+      local = new java.io.File("./static", path.substring(prefix.length()));
     }
     String message = new java.util.Date().toString() + " GET " + uri;
     if(local != null && local.exists())
