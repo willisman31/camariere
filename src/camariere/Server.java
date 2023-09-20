@@ -1,9 +1,21 @@
 package camariere;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.Date;
+import java.util.Map;
+import java.util.HashMap;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpExchange;
+
 class Server
 {
-  static final java.util.Map<String, String> types =
-      new java.util.HashMap<>(java.util.Map.of(
+  static final Map<String, String> types =
+      new HashMap<>(Map.of(
           "html", "text/html",
           "js", "text/javascript",
           "css", "text/css",
@@ -12,7 +24,7 @@ class Server
           "ico", "image/x-icon",
           "json", "application/json"
       ));
-
+  
   private static int port = 8080;
   private static String prefix = "/";
 
@@ -49,38 +61,36 @@ class Server
     }
   }
 
-  public static void main(String[] a) throws java.io.IOException
+  public static void main(String[] a) throws IOException
   {
     args(a);
-    java.net.InetSocketAddress host =
-        new java.net.InetSocketAddress("localhost", port);
-    com.sun.net.httpserver.HttpServer server =
-        com.sun.net.httpserver.HttpServer.create(host, 0
+    InetSocketAddress host = new InetSocketAddress("localhost", port);
+    HttpServer server = HttpServer.create(host, 0
         );
     server.createContext("/", Server::handleRequest);
     server.start();
-    logger.log("Server is running at http://"
-        + host.getHostName() + ":" + host.getPort() + prefix);
+    Message message = new Message("Server is running at http://"
+            + host.getHostName() + ":" + host.getPort() + prefix);
+    logger.log(message);
   }
 
-  private static void handleRequest(com.sun.net.httpserver.HttpExchange t)
-      throws java.io.IOException
+  private static void handleRequest(HttpExchange t)
+      throws IOException
   {
-    java.net.URI uri = t.getRequestURI();
+    URI uri = t.getRequestURI();
     if(uri.toString().endsWith("/"))
     {
       uri = uri.resolve("index.html");
     }
     String path = uri.getPath();
-    java.io.File local = null;
+    File local = null;
     if(path.startsWith(prefix))
     {
-      local = new java.io.File("./static", path.substring(prefix.length()));
+      local = new File("./static", path.substring(prefix.length()));
     }
-    String message = new java.util.Date().toString() + " GET " + uri;
+    String message = new Date().toString() + " GET " + uri;
     if(local != null && local.exists())
     {
-      //String response = "This is the response of "+local.getAbsolutePath();
       String filename = local.getName();
       String ext = filename.substring(filename.lastIndexOf('.') + 1);
       if(types.containsKey(ext))
@@ -91,9 +101,9 @@ class Server
       }
       message += " 200 " + local.length();
       t.sendResponseHeaders(200, local.length());
-      try(java.io.OutputStream out = t.getResponseBody())
+      try(OutputStream out = t.getResponseBody())
       {
-        java.nio.file.Files.copy(local.toPath(), out);
+        Files.copy(local.toPath(), out);
       }
     }
     else
@@ -101,7 +111,7 @@ class Server
       message += " 404";
       String response = "File not found " + uri.toString();
       t.sendResponseHeaders(404, response.length());
-      try(java.io.OutputStream os = t.getResponseBody())
+      try(OutputStream os = t.getResponseBody())
       {
         os.write(response.getBytes());
       }

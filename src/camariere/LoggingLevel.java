@@ -1,8 +1,7 @@
 package camariere;
 
 public enum LoggingLevel {
-	ALL(7),
-	TRACE(6),
+	ALL(6),
 	DEBUG(5),
 	INFO(4),
 	WARN(3),

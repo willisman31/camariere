@@ -1,6 +1,6 @@
 package camariere;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Message {
 
@@ -9,7 +9,7 @@ public class Message {
 	String timestamp;
 	
 	public Message() {
-		this.timestamp = LocalDate.now().toString();
+		this.timestamp = new Date().toString();
 	}
 	
 	public Message(String desc) {
