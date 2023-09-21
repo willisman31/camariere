@@ -65,8 +65,7 @@ class Server
   {
     args(a);
     InetSocketAddress host = new InetSocketAddress("localhost", port);
-    HttpServer server = HttpServer.create(host, 0
-        );
+    HttpServer server = HttpServer.create(host, 0);
     server.createContext("/", Server::handleRequest);
     server.start();
     Message message = new Message("Server is running at http://"
@@ -116,6 +115,7 @@ class Server
         os.write(response.getBytes());
       }
     }
-    logger.log(message);
+    logger.log(new Message(message));
+  }
   }
 }
