@@ -33,9 +33,9 @@ public class Logger {
 			}
 		} catch (FileNotFoundException f) {
 			System.out.println("Logging to file failed for message: " + message);
-			return 0;
+			return 1;
 		}
-		return 1;
+		return 0;
 	}
 	
 	public int log(Message message) {
@@ -54,9 +54,29 @@ public class Logger {
 			}
 		} catch (FileNotFoundException f) {
 			System.out.println("Logging to file failed for message: " + message.toString());
-			return 0;
+			return 1;
 		}
-		return 1;
+		return 0;
+	}
+	
+	public int log(Exception exception, LoggingLevel level) {
+		try {
+			FileOutputStream logFile = new FileOutputStream(this.outFile, true);
+			PrintStream appendLogFile = new PrintStream(logFile);
+			PrintStream console = System.out;
+			if (level.level() <= this.getLoggingLevel().level()) {
+				System.setOut(appendLogFile);
+				System.out.println(exception.toString());
+				if (this.logToConsole) {
+					System.setOut(console);
+					System.out.println(exception.toString());
+				}
+			}
+		} catch (FileNotFoundException f) {
+			System.out.println("Logging to file failed for message: " + exception.toString());
+			return 1;
+		}
+		return 0;
 	}
 	
 	public void setLoggingLevel(LoggingLevel level) {
