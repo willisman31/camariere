@@ -57,7 +57,8 @@ class Server {
         server.createContext("/", Server::handleRequest);
         server.start();
         Message message = new Message(
-                "Server is running at http://" + host.getHostName() + ":" + host.getPort() + prefix);
+                "Server is running at http://" + host.getHostName()
+				+ ":" + host.getPort() + prefix);
         logger.log(message);
     }
 
@@ -94,6 +95,5 @@ class Server {
         }
         logger.log(new Message(message));
     }
-
 
 }
