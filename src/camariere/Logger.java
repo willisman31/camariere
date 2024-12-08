@@ -1,7 +1,6 @@
 package camariere;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.io.FileNotFoundException;
@@ -13,9 +12,6 @@ public class Logger {
     boolean logToConsole;
 
     public Logger() {
-        LocalDate today = LocalDate.now();
-        String outFileName = "./logs/camariere-" + today.toString() + ".log";
-        this.outFile = new File(outFileName);
         this.loggingLevel = LoggingLevel.ALL;
         this.logToConsole = true;
     }
@@ -79,6 +75,20 @@ public class Logger {
         return 0;
     }
 
+    private boolean createLogOutputFile(String outputFilePath)
+        throws IOException {
+
+        // Create log file with 644 perms by default
+        // TODO: make perms, location configurable from config file.
+        String outFileName = "/tmp/camariere.log";
+        this.outFile = new File(outFileName);
+        if (!outfile.isFile()) {
+            outfile.createNewFile();
+        }
+        outfile.setWritable(true, true);
+        outfile.setReadable(true, false);
+    }
+
     public void setLoggingLevel(LoggingLevel level) {
         this.loggingLevel = level;
     }
@@ -100,4 +110,3 @@ public class Logger {
     }
 
 }
-

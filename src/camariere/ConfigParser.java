@@ -6,10 +6,10 @@ import org.w3c.dom.Node;
 
 public class ConfigParser {
 
-	//private File config_file;
+    //private File config_file;
 
-	public String parse() {
-		return null;
-	}
+    public String parse() {
+        return null;
+    }
 
 }

@@ -58,7 +58,7 @@ class Server {
         server.start();
         Message message = new Message(
                 "Server is running at http://" + host.getHostName()
-				+ ":" + host.getPort() + prefix);
+                + ":" + host.getPort() + prefix);
         logger.log(message);
     }
 
